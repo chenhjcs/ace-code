@@ -39,7 +39,8 @@ redis:
 # 项目中引用
 1、初始化编码规则
 ```
-to be finished
+到数据库中执行文件，根据具体情况调整规则，规则维护界面暂未开发：
+resources/sql/PCM_SYS_CODE_RULE.sql
 ```
 
  
