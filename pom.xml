@@ -1,0 +1,187 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.github.lidiliang</groupId>
+    <artifactId>ace-code</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>ace-code</name>
+    <packaging>jar</packaging>
+    <url>https://github.com/lidiliang/ace-code</url>
+
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+    <scm>
+        <connection>scm:git:https://github.com/lidiliang/ace-code.git</connection>
+        <developerConnection>scm:git:https://github.com/lidiliang/ace-code.git</developerConnection>
+        <url>https://github.com/lidiliang/ace-code</url>
+        <tag>0.0.1</tag>
+    </scm>
+    <developers>
+        <developer>
+            <name>lidiliang</name>
+            <email>962777944@qq.com</email>
+        </developer>
+    </developers>
+    <distributionManagement>
+        <repository>
+            <id>nexus-snapshots</id>
+            <name>Hello Snapshots Repository</name>
+            <url>http://mvn.gz.cvte.cn/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <name>Hello Snapshots Repository</name>
+            <url>http://mvn.gz.cvte.cn/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+    <properties>
+        <java.version>1.7</java.version>
+        <!-- 依赖版本 -->
+        <mybatis.version>3.3.1</mybatis.version>
+        <mybatis.spring.version>1.2.4</mybatis.spring.version>
+        <mapper.version>3.3.9</mapper.version>
+    </properties>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.4.2.RELEASE</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- jdbc driver -->
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.0.11</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.wxiaoqi</groupId>
+            <artifactId>ace-cache</artifactId>
+            <version>0.0.2-SNAPSHOT</version>
+        </dependency>
+        <!--Mybatis -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>${mybatis.spring.version}</version>
+        </dependency>
+        <!--通用Mapper -->
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper</artifactId>
+            <version>${mapper.version}</version>
+        </dependency>
+
+    </dependencies>
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <build>
+                <filters>
+                    <filter>src/main/resources/dev.properties</filter>
+                </filters>
+            </build>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
+    <repositories>
+        <repository>
+            <id>nexus</id>
+            <name>nexus</name>
+            <url>http://mvn.gz.cvte.cn/nexus/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>nexus-releases</id>
+            <name>CVTE-Release-Repository</name>
+            <url>http://mvn.gz.cvte.cn/nexus/content/repositories/releases/</url>
+            <releases>
+                <updatePolicy>daily</updatePolicy>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>nexus-snapshots</id>
+            <name>CVTE-snapshots-Repository</name>
+            <url>http://mvn.gz.cvte.cn/nexus/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+    <build>
+        <plugins>
+            <!-- maven profile 打包 -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <encoding>utf-8</encoding>
+                    <useDefaultDelimiters>true</useDefaultDelimiters>
+                </configuration>
+            </plugin>
+            <!-- 打包排除部分文件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/builder/*</exclude>
+                        <exclude>**/dev.properties</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <type>jar</type>
+                            <includeTypes>jar</includeTypes>
+                            <outputDirectory>
+                                ${project.build.directory}/lib
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

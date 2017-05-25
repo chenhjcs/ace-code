@@ -1,0 +1,52 @@
+server:
+    port: 7944
+    context-path: #/
+
+#redis-cache 相关
+redis:
+    pool:
+         maxActive: ${redis.pool.maxActive}
+         maxIdle: ${redis.pool.maxIdle}
+         maxWait: ${redis.pool.maxWait}
+    host: ${redis.host}
+    port: ${redis.port}
+    password: ${redis.password}
+    database: ${redis.database}
+    timeout: ${redis.timeout}
+    # 服务或应用名
+    sysName: PCM
+    enable: ${redis.enable}
+
+spring:
+    datasource:
+        name: test
+        url: ${jdbc.url}
+        username: ${jdbc.username}
+        password: ${jdbc.password}
+        # 使用druid数据源
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: ${jdbc.driverClass}
+        filters: stat
+        maxActive: 20
+        initialSize: 1
+        maxWait: 60000
+        minIdle: 1
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: SELECT 1 FROM DUAL
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxOpenPreparedStatements: 20
+   
+    jackson:
+        date-format: yyyy-MM-dd HH:mm:ss
+        time-zone: GMT+8
+        
+mybatis:
+    basepackage: com.ace.code
+    xmlLocation: classpath:mapper/**/*.xml
+    #选填,若需要就写上 否则 注释掉
+    typeAliasesPackage: com.ace.code
+    typeHandlersPackage: com.ace.code.handler
