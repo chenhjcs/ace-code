@@ -1,10 +1,10 @@
 # ace-code
 
 基于SpringBoot的简单业务编码生成器，如选配单号：CPC201705250000001 <br/>
-编码规则存储在关系型数据库中，通过mybatis的访问，最新编码缓存到redis中统一管理。
+编码规则存储在关系型数据库中，通过mybatis的访问，最新编码及其规则缓存到redis中统一管理。
 
-#使用手册
-##maven依赖
+# 使用手册
+## maven依赖
 ```
 <dependency>
     <groupId>com.github.lidiliang</groupId>
@@ -12,10 +12,10 @@
     <version>0.0.1</version>
 </dependency>
 ```
-##启用编码生成器
+## 启用编码生成器
 Application类上的注解@ComponentScan中加入"com.ace.code.service"
 
-#ace-cache相关
+# ace-cache相关
 为什么使用ace-cache? 因为ace-cache是基于redis轻量实现的，而且拥有简单管理界面。
 
 1、配置redis数据源，application.yml文件 <br/>
