@@ -50,7 +50,7 @@ private ICodeManagerService codeManagerService;
 ```
 3、使用方法：
 ```
-业务编码划分非两部分：编码前缀（包括固定标识、日期等内容）、流水号。
+业务编码划分为两部分：编码前缀（包括固定标识、日期等内容）、流水号。
 流水号的递增由redis管理。
  
 方法1：
