@@ -1,6 +1,7 @@
 package com.ace.code.service;
 
 import com.ace.code.handler.CodeHandler;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class CodeManagerServiceTest {
 	private ICodeManagerService codeManagerService;
 
 	@Test
+	@Ignore
 	public void test() {
 		String code = codeManagerService.getCode("PCM_CHOICE_LIST_HW", "CHOICE_CODE");
 		System.out.println("code=" + code);
