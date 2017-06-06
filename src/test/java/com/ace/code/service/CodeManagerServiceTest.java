@@ -33,7 +33,7 @@ public class CodeManagerServiceTest extends GenericTest {
 			t.start();
 		}
 		// 执行60秒
-		Thread.sleep(60 * 1000);
+		Thread.sleep(10 * 1000);
 		//停止所有线程
 		CodeManagerServiceTest.Task.alive = false;
 		// 等待所有线程终止
