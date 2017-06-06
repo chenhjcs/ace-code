@@ -1,6 +1,8 @@
 package com.ace.code.service.impl;
 
 import com.ace.code.handler.CodeHandler;
+import com.ace.code.lock.Lock;
+import com.ace.code.lock.redis.RedisReentrantLock;
 import com.ace.code.service.ICodeManagerService;
 import com.ace.code.service.IMybatisService;
 import com.ace.code.service.IRedisUtilService;
@@ -8,6 +10,8 @@ import com.ace.code.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.util.Date;
 import java.util.Map;
@@ -26,6 +30,9 @@ import java.util.regex.Pattern;
 public class CodeManagerServiceImpl implements ICodeManagerService {
     @Autowired
     private IRedisUtilService redisUtilService;
+
+    @Autowired
+    private JedisPool jedisPool;
 
     @Autowired
     private IMybatisService mybatisService;
@@ -51,9 +58,18 @@ public class CodeManagerServiceImpl implements ICodeManagerService {
         }
         regExp.append("$");
 
-
-        return getCodeFromRule(table, column, key, regExp.toString(), codePrefixStr,
-                serialSize);
+        Jedis jedis = jedisPool.getResource();
+        Lock lock = new RedisReentrantLock(jedis, key);
+        if (lock.tryLock()) {
+            try {
+                return getCodeFromRule(table, column, key, regExp.toString(), codePrefixStr, serialSize);
+            } finally {
+                lock.unlock();
+                if(jedis != null) jedis.close();
+            }
+        } else {
+            throw new RuntimeException("服务器繁忙，请稍后重试！");
+        }
     }
 
     public String getCode(String table, String column) {
@@ -82,7 +98,21 @@ public class CodeManagerServiceImpl implements ICodeManagerService {
         regExp.append("$");
 
         String key  = table + "-" + column;
-        return getCodeFromRule(table, column, key, regExp.toString(), codePrefix.toString(), serialSize);
+
+        // redis 分布式锁
+        Jedis jedis = jedisPool.getResource();
+        Lock lock = new RedisReentrantLock(jedis, key);
+        if (lock.tryLock()) {
+            try {
+                return getCodeFromRule(table, column, key, regExp.toString(), codePrefix.toString(), serialSize);
+            } finally {
+                lock.unlock();
+                if(jedis != null) jedis.close();
+            }
+        } else {
+            throw new RuntimeException("服务器繁忙，请稍后重试！");
+        }
+
     }
 
     private String getCodeFromRule(String table, String column, String key,
