@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  configuration为根元素，包含三个属性:
+  debug,指是否开启logback内部日志，没有设置此属性或设置其值为空、null或false时，表示不开启，否则，开启；
+  scan,设置是否定时扫描配置文件
+  scanPeriod,设置扫描周期，与scan属性配合使用，默认是60000毫秒，如果该属性值没有带单位，则单位为毫秒，可带的单位有milli/millisecond/second/seconde/minute/hour/day，可忽略大小写
+
+    scan:
+    当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true。
+    scanPeriod:
+    设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。
+    debug:
+    当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false
+-->
+<configuration debug="true" scan="true" scanPeriod="600 seconds">
+
+    <property name="AppName" value="ace-code"/>
+    <property name="LOG_HOME" value="./logs"/>
+    
+    <contextName>${AppName}</contextName>
+	
+    <!--
+  appender表示日志输出的方式，该元素必须包含name、classs属性;
+  name，表示appender的唯一标识
+  class一般常见有ch.qos.logback.core.FileAppender、ch.qos.logback.core.rolling.RollingFileAppender、ch.qos.logback.core.ConsoleAppender
+  ConsoleAppender:
+    把日志添加到控制台，有以下子节点：
+    <encoder>：对日志进行格式化。（具体参数稍后讲解 ）
+    <target>：字符串 System.out 或者 System.err ，默认 System.out
+    -->
+    <!-- 控制台日志 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d %-4p %c:%L - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- 错误日志 -->
+    <!-- 按照每天生成日志文件
+
+     FileAppender:
+    把日志添加到文件，有以下子节点：
+    <file>：被写入的文件名，可以是相对目录，也可以是绝对目录，如果上级目录不存在会自动创建，没有默认值。
+    <append>：如果是 true，日志被追加到文件结尾，如果是 false，清空现存文件，默认是true。
+    <encoder>：对记录事件进行格式化。（具体参数稍后讲解 ）
+    <prudent>：如果是 true，日志会被安全的写入文件，即使其他的FileAppender也在向此文件做写入操作，效率低，默认是 false。
+
+
+    RollingFileAppender:
+        滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件。有以下子节点：
+        <file>：被写入的文件名，可以是相对目录，也可以是绝对目录，如果上级目录不存在会自动创建，没有默认值。
+        <append>：如果是 true，日志被追加到文件结尾，如果是 false，清空现存文件，默认是true。
+        <encoder>：对记录事件进行格式化。（具体参数稍后讲解 ）
+        <rollingPolicy>:当发生滚动时，决定 RollingFileAppender 的行为，涉及文件移动和重命名。
+        <triggeringPolicy >: 告知 RollingFileAppender 合适激活滚动。
+        <prudent>：当为true时，不支持FixedWindowRollingPolicy。支持TimeBasedRollingPolicy，但是有两个限制，1不支持也不允许文件压缩，2不能设置file属性，必须留空。
+
+    rollingPolicy：
+
+        TimeBasedRollingPolicy： 最常用的滚动策略，它根据时间来制定滚动策略，既负责滚动也负责出发滚动。有以下子节点：
+        <fileNamePattern>:
+        必要节点，包含文件名及“%d”转换符， “%d”可以包含一个java.text.SimpleDateFormat指定的时间格式，如：%d{yyyy-MM}。如果直接使用 %d，默认格式是 yyyy-MM-dd。RollingFileAppender 的file字节点可有可无，通过设置file，可以为活动文件和归档文件指定不同位置，当前日志总是记录到file指定的文件（活动文件），活动文件的名字不会改变；如果没设置file，活动文件的名字会根据fileNamePattern 的值，每隔一段时间改变一次。“/”或者“\”会被当做目录分隔符。
+
+        <maxHistory>:
+        可选节点，控制保留的归档文件的最大数量，超出数量就删除旧文件。假设设置每个月滚动，且<maxHistory>是6，则只保存最近6个月的文件，删除之前的旧文件。注意，删除旧文件是，那些为了归档而创建的目录也会被删除。
+
+
+        FixedWindowRollingPolicy： 根据固定窗口算法重命名文件的滚动策略。有以下子节点：
+        <minIndex>:窗口索引最小值
+        <maxIndex>:窗口索引最大值，当用户指定的窗口过大时，会自动将窗口设置为12。
+        <fileNamePattern >:
+        必须包含“%i”例如，假设最小值和最大值分别为1和2，命名模式为 mylog%i.log,会产生归档文件mylog1.log和mylog2.log。还可以指定文件压缩选项，例如，mylog%i.log.gz 或者 没有log%i.log.zip
+
+        triggeringPolicy:
+
+        SizeBasedTriggeringPolicy： 查看当前活动文件的大小，如果超过指定大小会告知RollingFileAppender 触发当前活动文件滚动。只有一个节点:
+        <maxFileSize>:这是活动文件的大小，默认值是10MB。
+     -->
+
+
+    <!-- ************* 租户管理端 ****************** -->
+    <appender name="errorFile"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_HOME}/${AppName}/error/error.log</File>
+        <encoder>
+            <pattern>%d %c:%L-%m%n</pattern>
+        </encoder>
+        <!--日志文件输出的文件名-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/${AppName}/error/error_%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+
+
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-4level %logger{50} - %msg%n
+            </pattern>
+        </layout>
+    </appender>
+
+
+    <!--重要操作记录-->
+    <appender name="infoFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_HOME}/${AppName}/info/info.log</File>
+        <encoder>
+            <pattern>%d %c:%L-%m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/${AppName}/info/info_%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-4level %logger{50} - %msg%n
+            </pattern>
+        </layout>
+    </appender>
+
+
+    <!--debug操作记录-->
+    <appender name="debugFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_HOME}/${AppName}/debug/debug.log</File>
+        <encoder>
+            <pattern>%d %c:%L-%m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/${AppName}/debug/debug_%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-4level %logger{50} - %msg%n
+            </pattern>
+        </layout>
+    </appender>
+    
+
+    <!-- 数据库访问较慢的语句 -->
+    <appender name="slowSql"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_HOME}/sql/slow.log</File>
+        <encoder>
+            <pattern>%d %c:%L-%m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/sql/slow_%d{yyyy-MM-dd}</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <!--
+    logger元素用来设置某包或者类的日志输出级别
+    name:表示某包或类名称
+    level:表示日志级别，如果没有此属性，那么当前的logger会继承上级的日志级别
+
+    level优先级从高到低分别是 ERROR、WARN、INFO、DEBUG，控制到应用程序中相应级别的日志信息的开关。
+    假如在这里定义了INFO级别，则应用程序中所有DEBUG级别的日志信息将不被打印出来，也是说大于等于的级别的日志才输出。
+  -->
+
+    <!--记录执行慢的SQL-->
+    <logger name="com.alibaba.druid.filter.stat.StatFilter" level="DEBUG">
+        <appender-ref ref="slowSql"/>
+    </logger>
+	
+
+    
+    <!-- root与logger类似，它表示根logger，只有大于等于level级别的日志才交由appender处理，level默认为DEBUG -->
+    <root level="WARN">
+        <appender-ref ref="errorFile"/>
+        <appender-ref ref="console"/>
+    </root>
+
+</configuration>

@@ -2,6 +2,13 @@ server:
     port: 7944
     context-path: #/
 
+logging:
+#   是否启用logback
+    config: classpath:log/log.xml
+    level:
+       tk.mybatis: DEBUG
+       com.ace.code: DEBUG
+
 #redis-cache 相关
 redis:
     pool:
