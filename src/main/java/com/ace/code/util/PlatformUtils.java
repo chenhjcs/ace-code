@@ -9,8 +9,13 @@ import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @SuppressWarnings("restriction")
 public class PlatformUtils {
+	private static Logger logger = LoggerFactory.getLogger(PlatformUtils.class);
+
 
 	/**
 	 * 获取localhost MAC地址
@@ -27,7 +32,8 @@ public class PlatformUtils {
 			}
 			return sb.toString();
 		} catch (Exception e) {
-			return null;
+			logger.warn(" {\"result\": \"error in MACAddress method 获取MAC地址出错！\", \"msg\": \"" + e.getMessage() + "\"}");
+			return "";
 		}
 	}
 
@@ -46,6 +52,7 @@ public class PlatformUtils {
 			int pid = (Integer) pidMethod.invoke(mgmt);
 			return pid;
 		} catch (Exception e) {
+			logger.warn(" {\"result\": \"error in JVMPid method 获取当前JVM的进程ID出错！\", \"msg\": \"" + e.getMessage() + "\"}");
 			return -1;
 		}
 	}
