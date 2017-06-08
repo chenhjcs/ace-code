@@ -1,22 +1,12 @@
 package com.ace.code.service;
 
+import java.util.List;
+
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.ace.code.GenericTest;
 import com.ace.code.handler.CodeHandler;
-import com.ace.code.lock.redis.RedisReentrantLockTest;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.ace.code.CodeApp;
-
-import java.io.IOException;
-import java.util.List;
 
 
 public class CodeManagerServiceTest extends GenericTest {

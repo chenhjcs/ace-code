@@ -1,11 +1,13 @@
 package com.ace.code.lock.redis;
 
-import com.ace.code.GenericTest;
-import org.junit.Test;
 import redis.clients.jedis.Jedis;
 
 import java.util.List;
 import java.util.Random;
+
+import org.junit.Test;
+
+import com.ace.code.GenericTest;
 
 /**
  * @author Diliang.Li
@@ -14,6 +16,7 @@ import java.util.Random;
 public class RedisReentrantLockTest extends GenericTest{
 
     @Test
+//    @Ignore
     public void test() throws Exception {
         // 创建8个线程不停地去重入(随机次数n, 0 <= n <=8)获取锁
         List<Thread> threads = createThreads(8);
