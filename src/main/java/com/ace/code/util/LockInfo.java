@@ -47,9 +47,17 @@ public class LockInfo {
 	}
 	
 	public boolean isCurrentThread() {
-		return mac.equals(LOCAL_MAC) && jvmPid == CURRENT_PID && Thread.currentThread().getId() == threadId;
+		boolean isCurrentThread = true;
+		if(mac == null) {
+			if(LOCAL_MAC != null) {
+				isCurrentThread = false;
+			}
+		} else {
+			isCurrentThread = mac.equals(LOCAL_MAC);
+		}
+		return isCurrentThread && jvmPid == CURRENT_PID && Thread.currentThread().getId() == threadId;
 	}
-	
+
 	public static LockInfo fromString(String lockInfo) {
 		try {
 			return JSON.parseObject(lockInfo, LockInfo.class);
