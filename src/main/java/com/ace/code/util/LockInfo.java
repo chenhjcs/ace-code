@@ -1,5 +1,8 @@
 package com.ace.code.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 
@@ -11,19 +14,20 @@ import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
  *
  */
 public class LockInfo {
-	
 	private long expires;
-	
+
 	private String mac;
-	
+
 	private long jvmPid;
-	
+
 	private long threadId;
-	
+
 	private int count;
-	
+
+	private static final transient Logger log = LoggerFactory.getLogger(LockInfo.class);
+
 	private static final transient String LOCAL_MAC = PlatformUtils.MACAddress();
-	
+
 	private static final transient int CURRENT_PID = PlatformUtils.JVMPid();
 	
 	private static final transient SimplePropertyPreFilter FILTER = new SimplePropertyPreFilter();
@@ -45,7 +49,7 @@ public class LockInfo {
 		--count;
 		return this;
 	}
-	
+
 	public boolean isCurrentThread() {
 		boolean isCurrentThread = true;
 		if(mac == null) {
@@ -55,7 +59,11 @@ public class LockInfo {
 		} else {
 			isCurrentThread = mac.equals(LOCAL_MAC);
 		}
-		return isCurrentThread && jvmPid == CURRENT_PID && Thread.currentThread().getId() == threadId;
+		if(!isCurrentThread) {
+			log.warn("{\"msg\":\"current thread does not holds the lock\",\"lockInfo\":" + this.toString() + ", \"MACAddress\":\""+ LOCAL_MAC +"\"}");
+			return false;
+		}
+		return jvmPid == CURRENT_PID && Thread.currentThread().getId() == threadId;
 	}
 
 	public static LockInfo fromString(String lockInfo) {
