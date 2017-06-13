@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.lidiliang</groupId>
     <artifactId>ace-code</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>ace-code</name>
     <packaging>jar</packaging>
     <url>https://github.com/lidiliang/ace-code</url>
