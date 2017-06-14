@@ -185,7 +185,7 @@
   -->
 
     <!--记录执行慢的SQL-->
-    <logger name="com.alibaba.druid.filter.stat.StatFilter" level="DEBUG">
+    <logger name="com.alibaba.druid.filter.stat.StatFilter" level="DEBUG" additivity="false">
         <appender-ref ref="slowSql"/>
     </logger>
 	
