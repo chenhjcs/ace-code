@@ -31,8 +31,8 @@ public class PlatformUtils {
 				sb.append(String.format("%02X%s", macBytes[i], i < macBytes.length - 1 ? "-" : ""));
 			}
 			return sb.toString();
-		} catch (Exception e) {
-			logger.warn(" {\"result\": \"error in MACAddress method 获取MAC地址出错！\", \"msg\": \"" + e.getMessage() + "\"}");
+		} catch (Exception ex) {
+			logger.warn(" {\"result\": \"error in MACAddress method 获取MAC地址出错！\", \"msg\": \"" + ex.getMessage() + "\"}", ex);
 			return "";
 		}
 	}
