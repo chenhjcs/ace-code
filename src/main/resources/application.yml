@@ -7,7 +7,6 @@ logging:
     config: classpath:log/log.xml
     level:
        tk.mybatis: DEBUG
-       com.ace.code: DEBUG
 
 #redis-cache 相关
 redis:
