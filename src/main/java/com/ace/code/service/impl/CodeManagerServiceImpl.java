@@ -1,15 +1,5 @@
 package com.ace.code.service.impl;
 
-import com.ace.code.handler.CodeHandler;
-import com.ace.code.lock.Lock;
-import com.ace.code.lock.redis.RedisReentrantLock;
-import com.ace.code.service.ICodeManagerService;
-import com.ace.code.service.IMybatisService;
-import com.ace.code.service.IRedisUtilService;
-import com.ace.code.util.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -17,6 +7,18 @@ import java.util.Date;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import com.ace.code.handler.CodeHandler;
+import com.ace.code.lock.Lock;
+import com.ace.code.lock.redis.RedisReentrantLock;
+import com.ace.code.service.ICodeManagerService;
+import com.ace.code.service.IMybatisService;
+import com.ace.code.service.IRedisUtilService;
+import com.ace.code.util.DateUtils;
 
 /**
  * 编码管理器 <br>
@@ -50,7 +52,14 @@ public class CodeManagerServiceImpl implements ICodeManagerService {
         Long serialSize = null;
         for (String item : items) {
             String[] entry = item.split("[=|:]");
-            if (entry[0].equals("serial")) { // 流水号
+            if(entry[0].equals("fixed")) { // 固定标识
+                regExp.append(entry[1]);
+                codePrefixStr += entry[1];
+            } else if(entry[0].equals("date")) { // 日期
+                String date = DateUtils.formatDate(new Date(), entry[1]);
+                regExp.append(date);
+                codePrefixStr += date;
+            } else if (entry[0].equals("serial")) { // 流水号
                 regExp.append("([0-9]{").append(entry[1]).append("})");
                 serialSize = Long.valueOf(entry[1]);
                 break;
